@@ -22,6 +22,7 @@ export default class Gallery extends PureComponent {
         onSingleTapConfirmed: PropTypes.func,
         onGalleryStateChanged: PropTypes.func,
         onViewTransforming: PropTypes.func,
+        onSwipedVertical: PropTypes.func,
         onLongPress: PropTypes.func,
         removeClippedSubviews: PropTypes.bool,
         imageComponent: PropTypes.func,
@@ -65,15 +66,14 @@ export default class Gallery extends PureComponent {
                     this.activeResponder.onEnd(evt, gestureState, true);
                     this.getViewPagerInstance().flingToPage(this.currentPage, gestureState.vx);
                 } else {
+                    if (Math.abs(gestureState.vy) > 2) {
+                        this.props.onSwipedVertical && this.props.onSwipedVertical(evt, gestureState)
+                    }
                     this.activeResponder.onEnd(evt, gestureState);
-                }
-                if (this.activeResponder !== this.viewPagerResponder) {
-                    this.viewPagerResponder.onEnd(evt, gestureState);
                 }
                 this.activeResponder = null;
             }
             this.firstMove = true;
-
             this.props.onGalleryStateChanged && this.props.onGalleryStateChanged(true);
         };
 
@@ -84,7 +84,6 @@ export default class Gallery extends PureComponent {
             onResponderMove: (evt, gestureState) => {
                 if (this.firstMove) {
                     this.firstMove = false;
-
                     if (this.shouldScrollViewPager(evt, gestureState)) {
                         this.activeViewPagerResponder(evt, gestureState);
                     }
@@ -109,6 +108,8 @@ export default class Gallery extends PureComponent {
                 }
                 if (Math.abs(gestureState.dy) > Math.abs(gestureState.dx)) {
                     this.activeResponder = this.imageResponder
+                } else {
+                    this.activeResponder = this.viewPagerResponder
                 }
 
                 this.activeResponder.onMove(evt, gestureState)
@@ -245,8 +246,7 @@ export default class Gallery extends PureComponent {
                   onViewTransforming && onViewTransforming(transform, pageId);
               })}
               onTransformGestureReleased={((transform) => {
-                  // need the 'return' here because the return value is checked in ViewTransformer
-                  return onTransformGestureReleased && onTransformGestureReleased(transform, pageId);
+                  onTransformGestureReleased && onTransformGestureReleased(transform, pageId);
               })}
               ref={((ref) => { this.imageRefs.set(pageId, ref); })}
               key={'innerImage#' + pageId}
