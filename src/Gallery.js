@@ -252,7 +252,8 @@ export default class Gallery extends PureComponent {
             onError,
             onLoad,
             onLoadEnd,
-            onLoadStart
+            onLoadStart,
+            imageLoadingIndicatorProps
         } = this.props;
 
 
