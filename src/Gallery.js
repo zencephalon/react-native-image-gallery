@@ -15,6 +15,7 @@ export default class Gallery extends PureComponent {
         images: PropTypes.arrayOf(PropTypes.object),
         imageLoadingIndicatorProps: PropTypes.shape(ActivityIndicator.propTypes),
         initialPage: PropTypes.number,
+        enforceInitialPage: PropTypes.bool,
         scrollViewStyle: ViewPropTypes ? ViewPropTypes.style : View.propTypes.style,
         pageMargin: PropTypes.number,
         onEndReached: PropTypes.func,
@@ -27,6 +28,7 @@ export default class Gallery extends PureComponent {
         onLongPress: PropTypes.func,
         removeClippedSubviews: PropTypes.bool,
         imageComponent: PropTypes.func,
+        enableZoom: PropTypes.bool,
         errorComponent: PropTypes.func,
         flatListProps: PropTypes.object,
         onLoad: PropTypes.func,
@@ -35,6 +37,8 @@ export default class Gallery extends PureComponent {
 
     static defaultProps = {
         removeClippedSubviews: true,
+        enableZoom: true,
+        enforceInitialPage: false,
         imageComponent: undefined,
         scrollViewStyle: {},
         onEndReachedThreshold: 0.5,
@@ -131,6 +135,7 @@ export default class Gallery extends PureComponent {
 
         this.imageResponder = {
             onStart: (evt, gestureState) => {
+              if(this.props.enableZoom) {
                 const currentImageTransformer = this.getCurrentImageTransformer();
                 currentImageTransformer && currentImageTransformer.onResponderGrant(evt, gestureState);
                 if (this.props.onLongPress) {
@@ -138,16 +143,21 @@ export default class Gallery extends PureComponent {
                         this.props.onLongPress(gestureState);
                     }, 600);
                 }
+              }
             },
             onMove: (evt, gestureState) => {
+              if(this.props.enableZoom) {
                 const currentImageTransformer = this.getCurrentImageTransformer();
                 currentImageTransformer && currentImageTransformer.onResponderMove(evt, gestureState);
                 clearTimeout(this._longPressTimeout);
+              }
             },
             onEnd: (evt, gestureState) => {
+              if(this.props.enableZoom) {
                 const currentImageTransformer = this.getCurrentImageTransformer();
                 currentImageTransformer && currentImageTransformer.onResponderRelease(evt, gestureState);
                 clearTimeout(this._longPressTimeout);
+              }
             }
         };
     }
@@ -303,6 +313,7 @@ export default class Gallery extends PureComponent {
               ref={'galleryViewPager'}
               scrollViewStyle={this.props.scrollViewStyle}
               scrollEnabled={false}
+              enforceInitialPage={this.props.enforceInitialPage}
               renderPage={this.renderPage}
               pageDataArray={images}
               {...gestureResponder}
