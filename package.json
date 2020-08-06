@@ -1,8 +1,8 @@
 {
-  "name": "react-native-image-gallery",
-  "version": "2.1.5",
+  "name": "react-native-image-gallery-reborn",
+  "version": "2.2.1",
   "description": "Pure JavaScript image gallery component for iOS and Android",
-  "main": "src/Gallery.js",
+  "main": "src/Gallery.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,8 +17,11 @@
   },
   "homepage": "https://github.com/archriss/react-native-image-gallery#readme",
   "dependencies": {
+    "@types/react": "^16.9.44",
+    "@types/react-native": "^0.63.4",
     "prop-types": "^15.6.0",
     "react-mixin": "^3.0.5",
+    "react-native": "^0.63.2",
     "react-timer-mixin": "^0.13.3"
   },
   "peerDependencies": {

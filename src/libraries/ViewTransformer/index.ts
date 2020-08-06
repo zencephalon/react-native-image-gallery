@@ -5,7 +5,23 @@ import PropTypes from 'prop-types';
 import { createResponder } from '../GestureResponder';
 import { Rect, Transform, transformedRect, availableTranslateSpace, fitCenterRect, alignedRect, getTransform } from './TransformUtils';
 
-export default class ViewTransformer extends React.Component {
+type Props = {
+	enableTransform?: boolean
+	enableScale: boolean
+	enableTranslate: boolean
+	maxOverScrollDistance: number
+	maxScale: number
+	contentAspectRatio: number
+	enableResistance: boolean
+	onViewTransformed: () => void
+	onTransformGestureReleased: () => void
+	onSingleTapConfirmed: () => void
+	onLayout: () => void
+	onTransformStart: () => void
+	children: React.ReactNode
+}
+
+export default class ViewTransformer extends React.Component<Props, {}> {
     static Rect = Rect;
     static getTransform = getTransform;
 
@@ -34,7 +50,7 @@ export default class ViewTransformer extends React.Component {
         enableResistance: false
     };
 
-    constructor (props) {
+    constructor (props: Props) {
         super(props);
         this.state = {
             // transform state
@@ -375,8 +391,8 @@ export default class ViewTransformer extends React.Component {
             {
                 toValue: 1,
                 duration: duration,
-                easing: Easing.inOut(Easing.ease)
-            }
+								easing: Easing.inOut(Easing.ease),
+            },
         ).start();
     }
 

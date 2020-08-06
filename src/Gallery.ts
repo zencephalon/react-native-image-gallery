@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { View, ViewPropTypes, ActivityIndicator } from 'react-native';
+import React, { ComponentPropsWithoutRef, PureComponent } from 'react';
+import { View, ViewPropTypes, ActivityIndicator, ImageURISource, ViewProps, ViewStyle, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { createResponder } from './libraries/GestureResponder';
 import TransformableImage from './libraries/TransformableImage';
@@ -9,31 +9,34 @@ const DEFAULT_FLAT_LIST_PROPS = {
     windowSize: 3
 };
 
-export default class Gallery extends PureComponent {
-    static propTypes = {
-        ...View.propTypes,
-        images: PropTypes.arrayOf(PropTypes.object),
-        imageLoadingIndicatorProps: PropTypes.shape(ActivityIndicator.propTypes),
-        initialPage: PropTypes.number,
-        enforceInitialPage: PropTypes.bool,
-        scrollViewStyle: ViewPropTypes ? ViewPropTypes.style : View.propTypes.style,
-        pageMargin: PropTypes.number,
-        onEndReached: PropTypes.func,
-        onEndReachedThreshold: PropTypes.number,
-        onPageSelected: PropTypes.func,
-        onPageScrollStateChanged: PropTypes.func,
-        onPageScroll: PropTypes.func,
-        onSingleTapConfirmed: PropTypes.func,
-        onGalleryStateChanged: PropTypes.func,
-        onLongPress: PropTypes.func,
-        removeClippedSubviews: PropTypes.bool,
-        imageComponent: PropTypes.func,
-        enableZoom: PropTypes.bool,
-        errorComponent: PropTypes.func,
-        flatListProps: PropTypes.object,
-        onLoad: PropTypes.func,
-        onLoadStart: PropTypes.func
-    };
+type Props = {
+	images: {
+		source: ImageURISource,
+		dimensions?: { width: number, height: number }
+	}[]
+	initialPage?: number
+	enforceInitialPage?: boolean
+	scrollViewStyle?: ViewStyle
+	pageMargin: number,
+	onEndReached: () => void,
+	onEndReachedThreshold: number,
+	onPageSelected: (index: number) => void,
+	onPageScrollStateChanged: () => void,
+	onPageScroll: () => void,
+	onSingleTapConfirmed: () => void
+	onGalleryStateChanged: () => void
+	onLongPress: () => void
+	removeClippedSubviews: boolean,
+	imageComponent:() => void
+	enableZoom: boolean,
+	errorComponent: () => void
+	flatListProps: ComponentPropsWithoutRef<typeof FlatList>,
+	onLoad: () => void
+	onLoadStart: () => void
+	imageLoadingIndicatorProps: ComponentPropsWithoutRef<typeof ActivityIndicator>,
+} & ViewProps
+
+export default class Gallery extends PureComponent<Props> {
 
     static defaultProps = {
         removeClippedSubviews: true,
