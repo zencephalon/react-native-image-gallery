@@ -1,8 +1,8 @@
 {
-  "name": "react-native-image-gallery-reborn",
+  "name": "zen-react-native-image-gallery",
   "version": "2.2.2",
   "description": "Pure JavaScript image gallery component for iOS and Android",
-  "main": "src/Gallery.ts",
+  "main": "src/Gallery.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
