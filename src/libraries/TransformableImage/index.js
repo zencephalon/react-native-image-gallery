@@ -54,7 +54,7 @@ export default class TransformableImage extends PureComponent {
         };
     }
 
-    componentWillMount () {
+    UNSAFE_componentWillMount () {
         if (!this.state.imageDimensions) {
             this.getImageSize(this.props.image);
         }
